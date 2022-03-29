@@ -1,4 +1,4 @@
-require('.env').config();
+// require('.env').config();
 const { Client, Intents, MessageEmbed } = require('discord.js');
 const { categories } = require('./categories.json');
 
