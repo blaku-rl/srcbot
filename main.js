@@ -229,26 +229,28 @@ client.on('messageCreate', async message => {
 	const userId = message.author.id;
 	const responseEmbed = GetBaseEmbed();
 
-	console.log(message.author.flags);
-
-	if (queuePick) {
-		for (let i = 0; i < categories.length; i++) {
-			if (command === categories[i].command) {
-				await SelectMap(i, userId, responseEmbed, message);
+	try {
+		if (queuePick) {
+			for (let i = 0; i < categories.length; i++) {
+				if (command === categories[i].command) {
+					await SelectMap(i, userId, responseEmbed, message);
+					return;
+				}
+			}
+			if (command === 'rand') {
+				await SelectMap(Math.floor(Math.random() * categories.length), userId, responseEmbed, message);
 				return;
 			}
 		}
-		if (command === 'rand') {
-			await SelectMap(Math.floor(Math.random() * categories.length), userId, responseEmbed, message);
-			return;
-		}
-	}
 
-	if (command in commandList) {
-		await commandList[command](args, userId, responseEmbed, message);
-	} else {
-		responseEmbed.addField('Command not found', 'Use !h to get a list of valid commands');
-		await message.channel.send({ embeds: [responseEmbed] });
+		if (command in commandList) {
+			await commandList[command](args, userId, responseEmbed, message);
+		} else {
+			responseEmbed.addField('Command not found', 'Use !h to get a list of valid commands');
+			await message.channel.send({ embeds: [responseEmbed] });
+		}
+	} catch (error) {
+		console.error(error);
 	}
 });
 
