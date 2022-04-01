@@ -31,12 +31,12 @@ for (const cat of categories) {
 	});
 
 	categoriesString += `!${cat.command} ${cat.name}\n`;
-	// for (const mapItem of cat.maps) {
-	//	  if (mapItem['src-id'] !== '') {
-	//		  srcAPIRequests.push(`${httpStart}${mapItem['src-id']}${httpEnd}`);
-	//		  srcIDtoName[mapItem['src-id']] = mapItem.name;
-	//	  }
-	// }
+	for (const mapItem of cat.maps) {
+		if (mapItem['src-id'] !== '') {
+			srcAPIRequests.push(`${httpStart}${mapItem['src-id']}${httpEnd}`);
+			srcIDtoName[mapItem['src-id']] = mapItem.name;
+		}
+	}
 }
 categoriesString += '!rand Random Category';
 
@@ -77,7 +77,7 @@ function ParseAPIRunInfo(runs) {
 		for (const player of item.players.data) {
 			playerString += player.names.international + ', ';
 		}
-		const playerTitle = (item.players.data.length > 1 ? 'have' : 'has');
+		const playerDisplay = `${playerString.substring(0, playerString.length - 2)} ${(item.players.data.length > 1 ? 'have' : 'has')}`;
 
 		client.channels.fetch(verifiedChannelID)
 			.then(channel => {
@@ -85,7 +85,7 @@ function ParseAPIRunInfo(runs) {
 				// 	.addField('Category', item.category.data.name, true).addField('Time', item.times.realtime_t.toString(), true)
 				//	.addField(playerTitle, playerString.substring(0, playerString.length - 2));
 				// channel.send({ embeds: [responseEmbed] });
-				channel.send({ content: `${playerString.substring(0, playerString.length - 2)} ${playerTitle} a new verfied run! ${item.weblink}` });
+				channel.send({ content: `${playerDisplay} a new verfied run! ${item.weblink}` });
 			})
 			.catch(console.error);
 		// console.log(item.status['verify-date']); item.weblink
@@ -94,8 +94,8 @@ function ParseAPIRunInfo(runs) {
 	lastVerifiedRun[curCatID] = newLatestRunID;
 }
 
-// setInterval(CheckForNewRuns, 120000);
-setTimeout(CheckForNewRuns, 5000);
+setInterval(CheckForNewRuns, 120000);
+// setTimeout(CheckForNewRuns, 5000);
 
 function GetBaseEmbed() {
 	return new MessageEmbed()
