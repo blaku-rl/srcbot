@@ -1,17 +1,29 @@
-// require('.env').config();
+require('dotenv').config();
 const { Client, Intents, MessageEmbed } = require('discord.js');
 const { categories } = require('./categories.json');
+const axios = require('axios');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 const prefix = '!';
 const channelName = 'bots-only';
-
+const verifiedChannelID = '959212028139032646';
+const rlsrcID = '4d7eyz67';
+const httpStart = 'https://www.speedrun.com/api/v1/runs?game=';
+const httpEnd = '&status=verified&orderby=verify-date&direction=desc&embed=category,players';
+// Add a way to decide categories when creating a q
 let queue = [];
 let queueTimeout;
 let selectionTimeout;
 let queuePick = false;
-const categoriesFields = [];
 let categoriesString = '';
+
+const categoriesFields = [];
+const srcAPIRequests = [ `${httpStart}${rlsrcID}${httpEnd}` ];
+const lastVerifiedRun = {};
+const srcIDtoName = {};
+lastVerifiedRun[rlsrcID] = 'zp2jn4ny';
+srcIDtoName[rlsrcID] = 'Rocket League';
+
 for (const cat of categories) {
 	categoriesFields.push({
 		name: cat.name,
@@ -19,8 +31,71 @@ for (const cat of categories) {
 	});
 
 	categoriesString += `!${cat.command} ${cat.name}\n`;
+	// for (const mapItem of cat.maps) {
+	//	  if (mapItem['src-id'] !== '') {
+	//		  srcAPIRequests.push(`${httpStart}${mapItem['src-id']}${httpEnd}`);
+	//		  srcIDtoName[mapItem['src-id']] = mapItem.name;
+	//	  }
+	// }
 }
 categoriesString += '!rand Random Category';
+
+function CheckForNewRuns() {
+	console.log('Checking SRC For New Runs');
+	for (const req of srcAPIRequests) {
+		axios.get(req, {
+			headers : {
+				'User-Agent': 'rlsrcbot/0.1',
+			},
+		})
+		.then(res => {
+			ParseAPIRunInfo(res.data.data);
+		})
+		.catch(error => {
+			console.error(error);
+		});
+	}
+}
+
+function ParseAPIRunInfo(runs) {
+	if (runs.length === 0) return;
+	const curCatID = runs[0].game;
+	const newLatestRunID = runs[0].id;
+
+	if (!(curCatID in lastVerifiedRun)) {
+		console.log('No runs found');
+		console.log(curCatID);
+		console.log(lastVerifiedRun);
+		lastVerifiedRun[curCatID] = newLatestRunID;
+		return;
+	}
+	if (newLatestRunID === lastVerifiedRun[curCatID]) return;
+
+	for (const item of runs) {
+		if (item.id === lastVerifiedRun[curCatID]) break;
+		let playerString = '';
+		for (const player of item.players.data) {
+			playerString += player.names.international + ', ';
+		}
+		const playerTitle = (item.players.data.length > 1 ? 'have' : 'has');
+
+		client.channels.fetch(verifiedChannelID)
+			.then(channel => {
+				// const responseEmbed = GetBaseEmbed().setURL(item.weblink).setTitle('New Run Verified!')
+				// 	.addField('Category', item.category.data.name, true).addField('Time', item.times.realtime_t.toString(), true)
+				//	.addField(playerTitle, playerString.substring(0, playerString.length - 2));
+				// channel.send({ embeds: [responseEmbed] });
+				channel.send({ content: `${playerString.substring(0, playerString.length - 2)} ${playerTitle} a new verfied run! ${item.weblink}` });
+			})
+			.catch(console.error);
+		// console.log(item.status['verify-date']); item.weblink
+	}
+
+	lastVerifiedRun[curCatID] = newLatestRunID;
+}
+
+// setInterval(CheckForNewRuns, 120000);
+setTimeout(CheckForNewRuns, 5000);
 
 function GetBaseEmbed() {
 	return new MessageEmbed()
@@ -176,7 +251,7 @@ async function SelectMap(index, userId, responseEmbed, message) {
 	}
 	clearTimeout(selectionTimeout);
 	const cat = categories[index];
-	const mapName = cat.maps[Math.floor(Math.random() * cat.maps.length)];
+	const mapName = cat.maps[Math.floor(Math.random() * cat.maps.length)].name;
 	responseEmbed.addField('Selected Map', mapName);
 	await message.channel.send({ embeds: [responseEmbed] });
 	queuePick = false;

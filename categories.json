@@ -5,13 +5,34 @@
             "description": "Fly in the air with a ball",
             "command": "ad",
             "maps" : [
-                "Air Dribble Challenge",
-                "Air Dribble Hoops",
-                "Air Dribble Melee",
-                "Mugzrd's Air Dribble Gauntlet",
-                "Intermediate Air Dribble and Freestyles",
-                "Super Rush",
-                "Training Shop"
+                {
+                    "name": "Air Dribble Challenge",
+                    "src-id": "9d385791"
+                },
+                {
+                    "name": "Air Dribble Hoops",
+                    "src-id": "3dxk8vv1"
+                },
+                {
+                    "name": "Air Dribble Melee",
+                    "src-id": "pd0qz2l1"
+                },
+                {
+                    "name": "Mugzrd's Air Dribble Gauntlet",
+                    "src-id": "76r37jl6"
+                },
+                {
+                    "name": "Intermediate Air Dribbles and Freestyles",
+                    "src-id": "o6gnr3x1"
+                },
+                {
+                    "name": "Super Rush",
+                    "src-id": "yd4kzkk6"
+                },
+                {
+                    "name": "Training Shop",
+                    "src-id": "268w8zy6"
+                }
             ]
         },
         {
@@ -19,19 +40,54 @@
             "description": "Drive on the ground with a ball",
             "command": "d",
             "maps" : [
-                "Canyon Dribbling Challenge",
-                "Dribbling Challenge 1.2",
-                "Dribbling Challenge #2",
-                "Eversax's Dribble Challenge",
-                "Getting Over It (GOI_StartersCup)",
-                "Intermediate (or not) Dribble Map",
-                "Lethamyr's Manscaped Challenge",
-                "Minigolf",
-                "Noob Dribble",
-                "Rocket Adventures",
-                "The Alphabet",
-                "The Floor Is Lava",
-                "Tuberacing"
+                {
+                    "name": "Canyon Dribbling Challenge",
+                    "src-id": "3698oy2d"
+                },
+                {
+                    "name": "Dribbling Challenge 1.2",
+                    "src-id": "o1yjork1"
+                },
+                {
+                    "name": "Dribbling Challenge #2",
+                    "src-id": "9d38e2g1"
+                },
+                {
+                    "name": "Eversax's Dribble Challenge",
+                    "src-id": "nd28zr3d"
+                },
+                {
+                    "name": "Getting Over It (GOI_StartersCup)",
+                    "src-id": "v1pxzjp6"
+                },
+                {
+                    "name": "Intermediate (or not) Dribble Map",
+                    "src-id": "4d7ne0l6"
+                },
+                {
+                    "name": "Lethamyr's Manscaped Challenge",
+                    "src-id": "9d385ry1"
+                },
+                {
+                    "name": "Minigolf",
+                    "src-id": "268w8x96"
+                },
+                {
+                    "name": "Noob Dribble",
+                    "src-id": "9d385391"
+                },
+                {
+                    "name": "The Alphabet",
+                    "src-id": "j1n8zge1"
+                },
+                {
+                    "name": "The Floor Is Lava",
+                    "src-id": "pd0qz5l1"
+                },
+                {
+                    "name": "Tuberacing",
+                    "src-id": "46w2eo76"
+                }
             ]
         },
         {
@@ -39,18 +95,46 @@
             "description": "Compete in misc competitions",
             "command": "mg",
             "maps" : [
-                "Angry Balls",
-                "Eye-Spy",
-                "Fall Guys",
-                "Getting Over It (GOI Starters Cup)",
-                "Gidek Challenge #1",
-                "Hide And Seek #1",
-                "Minigolf",
-                "Rocket Adventures",
-                "Rocket Labs: Escape Game",
-                "Save The Planet Challenge",
-                "The Maze",
-                "We Were Here"
+                {
+                    "name": "Angry Balls",
+                    "src-id": "k6qwz2m6"
+                },
+                {
+                    "name": "Eye-Spy",
+                    "src-id": "9d38egy1"
+                },
+                {
+                    "name": "Fall Guys",
+                    "src-id": "ldej0rx1"
+                },
+                {
+                    "name": "Gidek Challenge #1",
+                    "src-id": "46w2e996"
+                },
+                {
+                    "name": "Hide And Seek #1",
+                    "src-id": "j1lq8ve6"
+                },
+                {
+                    "name": "Rocket Adventures",
+                    "src-id": "ldej0xj1"
+                },
+                {
+                    "name": "Rocket Labs: Escape Game",
+                    "src-id": "k6qwrk96"
+                },
+                {
+                    "name": "Save The Planet Challenge",
+                    "src-id": "m1mnz4jd"
+                },
+                {
+                    "name": "The Maze",
+                    "src-id": "3dxk83y1"
+                },
+                {
+                    "name": "We Were Here",
+                    "src-id": "4d7ne936"
+                }
             ]
         },
         {
@@ -58,21 +142,62 @@
             "description": "Whatever you do, be tight and precise",
             "command": "o",
             "maps" : [
-                "Alexey's Compound Alpha",
-                "Obstacle Course 1",
-                "Obstacle Course #2 v1.1",
-                "Parkour Map",
-                "Parkour Map #2 It's Moving!",
-                "Parkour Map #3 Into The Dark",
-                "Rocket Park",
-                "Speed Jump: Boost",
-                "Speed Jump: 2",
-                "Speed Jump: Trials 1",
-                "Speed Jump: Trials 2",
-                "Speed Jump: Trials 3",
-                "Speed Jump: Trials 3 Reversed",
-                "Speed Jump: Trials 4",
-                "The Wall"
+                {
+                    "name": "Alexey's Compound Alpha",
+                    "src-id": "w6j73n26"
+                },
+                {
+                    "name": "Obstacle Course 1",
+                    "src-id": "y655qr86"
+                },
+                {
+                    "name": "Obstacle Course #2 v1.1",
+                    "src-id": "v1pxzpp6"
+                },
+                {
+                    "name": "Parkour Map",
+                    "src-id": "3dxk87v1"
+                },
+                {
+                    "name": "Parkour Map #2 It's Moving!",
+                    "src-id": "v1pxzw76"
+                },
+                {
+                    "name": "Parkour Map #3 Into The Dark",
+                    "src-id": "46w2e776"
+                },
+                {
+                    "name": "Rocket Park",
+                    "src-id": "kdkmrex1"
+                },
+                {
+                    "name": "Speed Jump: Boost",
+                    "src-id": "m1mnz0jd"
+                },
+                {
+                    "name": "Speed Jump: 2",
+                    "src-id": "268w8n56"
+                },
+                {
+                    "name": "Speed Jump: Trials 1",
+                    "src-id": "j1lqz346"
+                },
+                {
+                    "name": "Speed Jump: Trials 2",
+                    "src-id": "m1zkmr31"
+                },
+                {
+                    "name": "Speed Jump: Trials 3",
+                    "src-id": "o6gnrm91"
+                },
+                {
+                    "name": "Speed Jump: Trials 4",
+                    "src-id": "w6j7nj76"
+                },
+                {
+                    "name": "The Wall",
+                    "src-id": "j1lqz7z6"
+                }
             ]
         },
         {
@@ -80,14 +205,38 @@
             "description": "Banish boost and finish the map",
             "command": "p",
             "maps" : [
-                "Egyptian Parkour",
-                "Hardcore Parkour",
-                "Hard Parkour Map",
-                "Jet Car Stunts",
-                "Parkour Course v1",
-                "Parkour Course v2",
-                "Team Nytro Workshop Map",
-                "Tron Themed Parkour Map"
+                {
+                    "name": "Egyptian Parkour",
+                    "src-id": "4d7n4qg6"
+                },
+                {
+                    "name": "Hardcore Parkour",
+                    "src-id": "k6qwzjx6"
+                },
+                {
+                    "name": "Hard Parkour Map",
+                    "src-id": "m1zkmnx1"
+                },
+                {
+                    "name": "Jet Car Stunts",
+                    "src-id": "ldej0zl1"
+                },
+                {
+                    "name": "Parkour Course v1",
+                    "src-id": "y655q086"
+                },
+                {
+                    "name": "Parkour Course v2",
+                    "src-id": "w6j73v56"
+                },
+                {
+                    "name": "Team Nytro Workshop Map",
+                    "src-id": "j1n8z9l1"
+                },
+                {
+                    "name": "Tron Themed Parkour Map",
+                    "src-id": "kdkmrjl1"
+                }
             ]
         },
         {
@@ -95,23 +244,70 @@
             "description": "Imagine you're in trackmania for a bit",
             "command": "rt",
             "maps" : [
-                "Booster-Rooster",
-                "Circuit 23",
-                "DFH Cliffside",
-                "Ice Ice Outpost",
-                "Kidney Island",
-                "Lethuigi's Mansion",
-                "Mapmaker's Island",
-                "Miniature Pool Table",
-                "MrToasties Playground",
-                "Rainbow Road 64",
-                "RC_Lake",
-                "Spaghetti Racing",
-                "Toronto Track",
-                "Tuberacing",
-                "Wario's Goldmine",
-                "Wave Race",
-                "Yoshi Circuit"
+                {
+                    "name": "Booster-Rooster",
+                    "src-id": "v1pxz776"
+                },
+                {
+                    "name": "Circuit 23",
+                    "src-id": ""
+                },
+                {
+                    "name": "DFH Cliffside",
+                    "src-id": "y655o736"
+                },
+                {
+                    "name": "Ice Ice Outpost",
+                    "src-id": "yd4k55g6"
+                },
+                {
+                    "name": "Kidney Island",
+                    "src-id": "w6j73876"
+                },
+                {
+                    "name": "Lethuigi's Mansion",
+                    "src-id": "y655oz86"
+                },
+                {
+                    "name": "Mapmaker's Island",
+                    "src-id": "yd4kzn56"
+                },
+                {
+                    "name": "Miniature Pool Table",
+                    "src-id": "9do83p31"
+                },
+                {
+                    "name": "MrToasties Playground",
+                    "src-id": ""
+                },
+                {
+                    "name": "Rainbow Road 64",
+                    "src-id": ""
+                },
+                {
+                    "name": "RC_Lake",
+                    "src-id": ""
+                },
+                {
+                    "name": "Spaghetti Racing",
+                    "src-id": "ldej03l1"
+                },
+                {
+                    "name": "Toronto Track",
+                    "src-id": ""
+                },
+                {
+                    "name": "Wario's Goldmine",
+                    "src-id": ""
+                },
+                {
+                    "name": "Wave Race",
+                    "src-id": "3dxk8mv1"
+                },
+                {
+                    "name": "Yoshi Circuit",
+                    "src-id": "4d7ne4r6"
+                }
             ]
         },
         {
@@ -119,20 +315,54 @@
             "description": "Fly, fly, fly the way psyonix intended",
             "command": "r",
             "maps" : [
-                "Future Rings",
-                "Impossible Rings",
-                "Impossible Rings 2",
-                "Kidney Island",
-                "Lethamyr's Giant Rings Map",
-                "Lucid Rings",
-                "Mapmaker's Island",
-                "Neon Heights Rings: Lethamyr",
-                "Neon Heights Rings: Draco's Remix",
-                "New Rings Map",
-                "Panics Air Race: Beach",
-                "Speed Jump: Rings 1",
-                "Speed Jump: Rings 2",
-                "Speed Jump: Rings 3"
+                {
+                    "name": "Future Rings",
+                    "src-id": "ldej0gx1"
+                },
+                {
+                    "name": "Impossible Rings",
+                    "src-id": "pdv2njv6"
+                },
+                {
+                    "name": "Impossible Rings 2",
+                    "src-id": "3698o72d"
+                },
+                {
+                    "name": "Lethamyr's Giant Rings Map",
+                    "src-id": "j1lqznz6"
+                },
+                {
+                    "name": "Lucid Rings",
+                    "src-id": "m1zkm501"
+                },
+                {
+                    "name": "Neon Heights Rings: Lethamyr",
+                    "src-id": "v1pxzxp6"
+                },
+                {
+                    "name": "Neon Heights Rings: Draco's Remix",
+                    "src-id": "3dxk8ky1"
+                },
+                {
+                    "name": "New Rings Map",
+                    "src-id": "j1n8z391"
+                },
+                {
+                    "name": "Panics Air Race: Beach",
+                    "src-id": "nd28n5vd"
+                },
+                {
+                    "name": "Speed Jump: Rings 1",
+                    "src-id": "o1yjo5v1"
+                },
+                {
+                    "name": "Speed Jump: Rings 2",
+                    "src-id": "3698vl8d"
+                },
+                {
+                    "name": "Speed Jump: Rings 3",
+                    "src-id": "y655oy46"
+                }
             ]
         }
     ]
