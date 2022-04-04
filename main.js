@@ -81,14 +81,9 @@ function ParseAPIRunInfo(runs) {
 
 		client.channels.fetch(verifiedChannelID)
 			.then(channel => {
-				// const responseEmbed = GetBaseEmbed().setURL(item.weblink).setTitle('New Run Verified!')
-				// 	.addField('Category', item.category.data.name, true).addField('Time', item.times.realtime_t.toString(), true)
-				//	.addField(playerTitle, playerString.substring(0, playerString.length - 2));
-				// channel.send({ embeds: [responseEmbed] });
 				channel.send({ content: `${playerDisplay} a new verfied run! ${item.weblink}` });
 			})
 			.catch(console.error);
-		// console.log(item.status['verify-date']); item.weblink
 	}
 
 	lastVerifiedRun[curCatID] = newLatestRunID;
