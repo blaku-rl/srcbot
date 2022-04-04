@@ -9,7 +9,7 @@ function GetBaseEmbed() : MessageEmbed {
 
 export default {
     commandPrefix: '*',
-    commandChannelID: '957884429060145172',
+    commandChannelID: '846578254856060958',
     verifiedChannelID: '959526619138097183',
     baseEmbedFunc: GetBaseEmbed
 } as BotConstants
