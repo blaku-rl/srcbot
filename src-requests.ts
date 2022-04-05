@@ -66,29 +66,47 @@ function CheckForNewRuns() {
 function ParseAPIRunInfo(runs : any, id : string) {
     let firstIteration = false
     if (!(id in latestRunForSrcID)) {
-        latestRunForSrcID[id] = ''
-        firstIteration = true
+		if (id === 'y655oz86') {
+			latestRunForSrcID[id] = 'y4q97e2m'
+		}
+		else {
+			latestRunForSrcID[id] = ''
+			firstIteration = true
+		}
     }
-	if (runs.length === 0) return;
-	const newLatestRunID = runs[0].id;
+	if (runs.length === 0) return
+	const newLatestRunID = runs[0].id
 
 	if (firstIteration) {
-		latestRunForSrcID[id] = newLatestRunID;
-		return;
+		latestRunForSrcID[id] = newLatestRunID
+		return
 	}
-	if (newLatestRunID === latestRunForSrcID[id]) return;
+	if (newLatestRunID === latestRunForSrcID[id]) return
 
 	for (const item of runs) {
-		if (item.id === latestRunForSrcID[id]) break;
-		let playerString = '';
+		if (item.id === latestRunForSrcID[id]) break
+		let playerString = ''
 		for (const player of item.players.data) {
-			playerString += player.names.international + ', ';
+			playerString += player.names.international + ', '
 		}
-		const playerDisplay = `${playerString.substring(0, playerString.length - 2)} ${(item.players.data.length > 1 ? 'have' : 'has')}`;
+		const playerDisplay = `${playerString.substring(0, playerString.length - 2)} ${(item.players.data.length > 1 ? 'have' : 'has')}`
+		console.log(`New run message: ${playerDisplay} a new verfied run! ${item.weblink}`)
 
-        const channel = client.channels.cache.get(constants.verifiedChannelID)
-        if (channel === null || channel?.type !== 'GUILD_TEXT') continue
-        channel.send({ content: `${playerDisplay} a new verfied run! ${item.weblink}` });
+        //const channel = client.channels.cache.get(constants.verifiedChannelID)
+        //if (channel === null || channel?.type !== 'GUILD_TEXT') continue
+        //channel.send({ content: `${playerDisplay} a new verfied run! ${item.weblink}` });
+		client.channels.fetch(constants.verifiedChannelID)
+			.then(channel => {
+				console.log('Verification Channel found')
+				if (channel === null || channel?.type !== 'GUILD_TEXT') return
+				console.log('Verification channel is valid')
+				try {
+					channel.send({ content: `${playerDisplay} a new verfied run! ${item.weblink}` })
+				} catch (error) {
+					console.error(error);
+				}
+			})
+			.catch(console.error)
 	}
 
 	latestRunForSrcID[id] = newLatestRunID;
