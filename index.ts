@@ -1,9 +1,9 @@
-import { Client, Intents, Message } from 'discord.js'
+import { Client, Intents, Message, MessageEmbed } from 'discord.js'
 import dotenv from 'dotenv'
 import { CommandStruct } from './custom-types'
 import commandList from './command-manager'
 import constants from './constants'
-import { ListenForRuns } from './src-requests'
+import requestManager from './speedrun/RequestManager'
 dotenv.config()
 
 const client = new Client({
@@ -18,7 +18,7 @@ client.on('ready', () => {
 })
 
 client.on('messageCreate', async (message : Message) => {
-	if (message.author === client.user || !message.content.startsWith(constants.commandPrefix) || message.channelId !== constants.commandChannelID) return;
+	if (message.author === client.user || !message.content.startsWith(constants.commandPrefix) || message.channelId !== process.env.COMMANDCHANNEL) return;
 
 	const args = message.content.slice(constants.commandPrefix.length).split(/ +/);
     const initCommand = args.shift() || '';
@@ -51,7 +51,7 @@ client.on('messageCreate', async (message : Message) => {
 	}
 });
 
-client.login(process.env.TOKEN)
-ListenForRuns(client)
+client.login(process.env.TOKEN);
+requestManager.BeginLooping();
 
-export default client
+export default client;
