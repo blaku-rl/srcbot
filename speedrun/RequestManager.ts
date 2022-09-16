@@ -9,9 +9,8 @@ class RequestManager {
     private newMapCheckLimit: number = 30;
 
     BeginLooping() {
-        this.TestFunction();
-        // this.CheckForNewMaps();
-        // this.RequestLoop();
+        this.CheckForNewMaps();
+        this.RequestLoop();
     }
 
     private CheckForNewMaps() {
