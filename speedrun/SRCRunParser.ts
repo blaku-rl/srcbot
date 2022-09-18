@@ -1,5 +1,5 @@
-import srcData, { CategoryInfo, LevelInfo, RunInfo, SRCMap, VariableInfo, RunnerInfo } from './SRCTypes'
-import runPoster from './RunPoster'
+import srcData, { CategoryInfo, LevelInfo, RunInfo, SRCMap, VariableInfo, RunnerInfo, SittingSubmittedRun } from './SRCTypes'
+import runPoster, { RunPoster } from './RunPoster'
 import rb from './RequestBuilder'
 
 class SRCRunParser {
@@ -44,9 +44,11 @@ class SRCRunParser {
 
                 let vDate: Date = curTime;
                 let sDate: Date = curTime;
+                let oldSubmittedRuns: Record<string, SittingSubmittedRun> = {};
                 if(item.id in srcData.allMaps) {
                     vDate = srcData.allMaps[item.id].latestVerifiedDate;
                     sDate = srcData.allMaps[item.id].latestSubmittedDate;
+                    oldSubmittedRuns = srcData.allMaps[item.id].oldSubmittedRuns;
                 }
 
                 const map: SRCMap = {
@@ -57,7 +59,8 @@ class SRCRunParser {
                     latestSubmittedDate: sDate,
                     levels: levels,
                     categories: cats,
-                    variables: variables
+                    variables: variables,
+                    oldSubmittedRuns: oldSubmittedRuns
                 };
                 srcData.allMaps[item.id] = map;
             } catch(error) {
@@ -134,7 +137,6 @@ class SRCRunParser {
 
     ParseNewSubmittedRuns(res : any) {
         const runs = res.data.data
-        if (runs.length === 0) return
 
         const curId: string = runs[0].game
         if(!(curId in srcData.allMaps)) {
@@ -143,21 +145,42 @@ class SRCRunParser {
         }
         const curMap = srcData.allMaps[curId];
 
-        const newestRunDate: Date = new Date(runs[0].submitted)
-        if (newestRunDate <= curMap.latestSubmittedDate) return
+        if (runs.length === 0) {
+            for(const oldRun in curMap.oldSubmittedRuns) {
+                runPoster.DeleteOldSubmittedRun(curMap.oldSubmittedRuns[oldRun]);
+            }
+            srcData.allMaps[curId].oldSubmittedRuns = {};
+            return;
+        }
+
+        const runChecked: Record<string, boolean> = {};
+        for(const oldRun in curMap.oldSubmittedRuns) {
+            runChecked[oldRun] = true;
+        }
     
         for (const run of runs) {
             try {
-                if (run.submitted <= curMap.latestSubmittedDate) break
                 const newRun: RunInfo = this.GenerateNewRunInfo(run, curMap);
-                runPoster.PostNewSubmittedRun(newRun);
+
+                if(newRun.id in runChecked) {
+                    runChecked[newRun.id] = false;
+                } else {
+                    runPoster.PostNewSubmittedRun(newRun);
+                }
             } catch(error) {
                 console.error(error);
                 runPoster.PostError('Error parsing new submitted runs');
             }
         }
+
+        for(const oldRun in runChecked) {
+            if(runChecked[oldRun]) {
+                runPoster.DeleteOldSubmittedRun(curMap.oldSubmittedRuns[oldRun]);
+                delete srcData.allMaps[curId].oldSubmittedRuns[oldRun];
+            }
+        }
     
-        srcData.allMaps[curId].latestSubmittedDate = newestRunDate
+        srcData.allMaps[curId].latestSubmittedDate = new Date(runs[0].submitted);
     }
 
     private GenerateNewRunInfo(run: any, curMap: SRCMap) : RunInfo {

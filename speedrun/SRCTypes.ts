@@ -27,7 +27,8 @@ export type SRCMap = {
     latestSubmittedDate: Date,
 	levels: Record<string, LevelInfo>,
 	categories: Record<string, CategoryInfo>,
-	variables: Record<string, VariableInfo>
+	variables: Record<string, VariableInfo>,
+	oldSubmittedRuns: Record<string, SittingSubmittedRun>
 }
 
 export type RunnerInfo = {
@@ -143,6 +144,11 @@ export class RunInfo {
 		return categoryStr;
     }
 };
+
+export type SittingSubmittedRun = {
+	messageID: string,
+	run: RunInfo
+}
 
 type SRCData = {
 	requestQueue : APIRequest[],

@@ -1,6 +1,8 @@
 import { MessageEmbed } from "discord.js";
-import srcData, { RunInfo } from './SRCTypes';
+import srcData, { RunInfo, SittingSubmittedRun } from './SRCTypes';
 import client from '../index';
+
+let idStr: string = '';
 
 export class RunPoster {
     private SetRunInfoInEmbed(run: RunInfo, embed: MessageEmbed): MessageEmbed {
@@ -21,7 +23,28 @@ export class RunPoster {
                     const message : MessageEmbed = new MessageEmbed()
                         .setTitle("NEW SUBMITTED RUN");
                     this.SetRunInfoInEmbed(run, message);
-                    channel.send({ embeds: [message] });
+                    channel.send({ embeds: [message] })
+                        .then((msg) => {
+                            srcData.allMaps[run.mapId].oldSubmittedRuns[run.id] = {
+                                messageID: msg.id,
+                                run: run
+                            };
+                        });
+                } catch (error) {
+                    console.error(error);
+                    this.PostError();
+                }
+            })
+            .catch(console.error);
+    }
+
+    DeleteOldSubmittedRun(oldSubmittedRun: SittingSubmittedRun) {
+        if(process.env.SUBMITTEDCHANNEL === undefined) return;
+        client.channels.fetch(process.env.SUBMITTEDCHANNEL)
+            .then(channel => {
+                if (channel === null || channel?.type !== 'GUILD_TEXT') return;
+                try {
+                    channel.messages.fetch(oldSubmittedRun.messageID).then(msg => msg.delete());
                 } catch (error) {
                     console.error(error);
                     this.PostError();
@@ -59,6 +82,24 @@ export class RunPoster {
                 if (channel === null || channel?.type !== 'GUILD_TEXT') return;
                 try {
                     channel.send({ content: `An error has occured${message === '' ? '' : `: '${message}'`}, check the logs <@333083158616735745>` })
+                } catch (error) {
+                    console.error(error);
+                }
+            })
+            .catch(console.error);
+    }
+
+    PostDelete() {
+        if(process.env.ERRORCHANNEL === undefined) return;
+        client.channels.fetch(process.env.ERRORCHANNEL)
+            .then(channel => {
+                if (channel === null || channel?.type !== 'GUILD_TEXT') return;
+                try {
+                    channel.send({content: 'Hey Delete me plz'})
+                        .then((message) => {
+                            console.log(message.id);
+                            idStr = message.id;
+                        })
                 } catch (error) {
                     console.error(error);
                 }
