@@ -212,10 +212,10 @@ class SRCRunParser {
     
         for (const player of players) {
             let image : string = "";
-            if(player.image === undefined || player.image.uri === undefined) {
+            if(player.assests === undefined || player.assests.image === undefined || player.assests.image.uri === undefined) {
                 image = backupImage;
             } else {
-                image = player.image.uri;
+                image = player.assests.image.uri;
             }
     
             const runner : RunnerInfo = {
