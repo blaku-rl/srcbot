@@ -2,8 +2,6 @@ import { MessageEmbed } from "discord.js";
 import srcData, { RunInfo, SittingSubmittedRun } from './SRCTypes';
 import client from '../index';
 
-let idStr: string = '';
-
 export class RunPoster {
     private SetRunInfoInEmbed(run: RunInfo, embed: MessageEmbed): MessageEmbed {
         embed.setURL(run.link)
@@ -82,24 +80,6 @@ export class RunPoster {
                 if (channel === null || channel?.type !== 'GUILD_TEXT') return;
                 try {
                     channel.send({ content: `An error has occured${message === '' ? '' : `: '${message}'`}, check the logs <@333083158616735745>` })
-                } catch (error) {
-                    console.error(error);
-                }
-            })
-            .catch(console.error);
-    }
-
-    PostDelete() {
-        if(process.env.ERRORCHANNEL === undefined) return;
-        client.channels.fetch(process.env.ERRORCHANNEL)
-            .then(channel => {
-                if (channel === null || channel?.type !== 'GUILD_TEXT') return;
-                try {
-                    channel.send({content: 'Hey Delete me plz'})
-                        .then((message) => {
-                            console.log(message.id);
-                            idStr = message.id;
-                        })
                 } catch (error) {
                     console.error(error);
                 }

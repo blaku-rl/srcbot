@@ -16,6 +16,7 @@ class RequestManager {
     private CheckForNewMaps() {
         srcData.requestQueue.push({
             req: rb.GetNewMapsRequest(),
+            id: '',
             func: runParser.ParseAllSeriesData.bind(runParser)
         });
     }
@@ -24,10 +25,12 @@ class RequestManager {
         for(const key of Object.keys(srcData.allMaps)) {
             const verReq: APIRequest = {
                 req : rb.GetNewVerifiedRunsRequest(key),
+                id: key,
                 func : runParser.ParseNewVerifiedRuns.bind(runParser)
             }
             const subReq: APIRequest = {
                 req : rb.GetNewSubmittedRunsRequest(key),
+                id: key,
                 func : runParser.ParseNewSubmittedRuns.bind(runParser)
             }
             srcData.requestQueue.push(verReq);
@@ -42,7 +45,7 @@ class RequestManager {
             },
         })
         .then(res => {
-            item.func(res)
+            item.func(res, item.id)
         })
         .catch(error => {
             console.error(error);
@@ -98,6 +101,7 @@ class RequestManager {
     private TestFunction() {
         this.SendRequest({
             req: rb.GetNewMapsRequest(),
+            id: '',
             func: runParser.ParseAllSeriesData.bind(runParser)
         });
 
@@ -129,17 +133,25 @@ class RequestManager {
         //     func: runParser.ParseNewVerifiedRuns.bind(runParser)
         // });
 
+        console.log('Getting new submitted runs')
         this.SendRequest({
-            req: rb.GetNewSubmittedRunsRequest(sjbID),
+            req: rb.GetNewSubmittedRunsRequest(rlID),
+            id: rlID,
             func: runParser.ParseNewSubmittedRuns.bind(runParser)
         });
 
-        //setTimeout(this.TestFunction3.bind(this), 10000);
+        setTimeout(this.TestFunction3.bind(this), 10000);
     }
 
     private TestFunction3() {
-        if(srcData.requestQueue.length > 0) {
-            this.SendRequest(srcData.requestQueue[0]);
+        // if(srcData.requestQueue.length > 0) {
+        //     this.SendRequest(srcData.requestQueue[0]);
+        // }
+        const rlID: string = '4d7eyz67';
+        console.log(srcData.allMaps[rlID].oldSubmittedRuns);
+        for(const run in srcData.allMaps[rlID].oldSubmittedRuns) {
+            console.log(srcData.allMaps[rlID].oldSubmittedRuns[run])
+            runPoster.DeleteOldSubmittedRun(srcData.allMaps[rlID].oldSubmittedRuns[run])
         }
     }
 }

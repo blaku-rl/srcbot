@@ -1,6 +1,7 @@
 export type APIRequest = {
 	req: string,
-	func: (arg0 : any) => void
+	id: string
+	func: (arg0 : any, arg1 : string) => void
 }
 
 export type VariableInfo = {
@@ -24,7 +25,6 @@ export type SRCMap = {
 	name: string,
 	image: string,
 	latestVerifiedDate: Date,
-    latestSubmittedDate: Date,
 	levels: Record<string, LevelInfo>,
 	categories: Record<string, CategoryInfo>,
 	variables: Record<string, VariableInfo>,

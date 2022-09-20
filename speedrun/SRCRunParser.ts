@@ -3,7 +3,7 @@ import runPoster, { RunPoster } from './RunPoster'
 import rb from './RequestBuilder'
 
 class SRCRunParser {
-    ParseAllSeriesData(res : any) {
+    ParseAllSeriesData(res : any, id: string) {
         console.log('Checking for new maps');
         console.log(`${res.data.data.length} games found`);
         const curTime: Date = new Date();
@@ -43,11 +43,9 @@ class SRCRunParser {
                 }
 
                 let vDate: Date = curTime;
-                let sDate: Date = curTime;
                 let oldSubmittedRuns: Record<string, SittingSubmittedRun> = {};
                 if(item.id in srcData.allMaps) {
                     vDate = srcData.allMaps[item.id].latestVerifiedDate;
-                    sDate = srcData.allMaps[item.id].latestSubmittedDate;
                     oldSubmittedRuns = srcData.allMaps[item.id].oldSubmittedRuns;
                 }
 
@@ -56,7 +54,6 @@ class SRCRunParser {
                     name: item.names.international,
                     image: item.assets["cover-medium"].uri,
                     latestVerifiedDate: vDate,
-                    latestSubmittedDate: sDate,
                     levels: levels,
                     categories: cats,
                     variables: variables,
@@ -70,7 +67,7 @@ class SRCRunParser {
         }
     }
     
-    ParseNewVerifiedRuns(res : any) {
+    ParseNewVerifiedRuns(res : any, id: string) {
         const runs = res.data.data
         if (runs.length === 0) return
         
@@ -104,6 +101,7 @@ class SRCRunParser {
                 if(!isInQueue) {
                     srcData.requestQueue.push({
                         req: leaderbordCheck,
+                        id: id,
                         func: this.ParseLeaderboardInfo.bind(this)
                     });
                 }
@@ -116,7 +114,7 @@ class SRCRunParser {
         srcData.allMaps[curId].latestVerifiedDate = newestRunDate
     }
 
-    ParseLeaderboardInfo(res: any) {
+    ParseLeaderboardInfo(res: any, id: string) {
         const runs: any = res.data.data.runs;
         if(runs.length === 0) return;
 
@@ -135,21 +133,26 @@ class SRCRunParser {
         }
     }
 
-    ParseNewSubmittedRuns(res : any) {
+    ParseNewSubmittedRuns(res : any, id: string) {
         const runs = res.data.data
 
-        const curId: string = runs[0].game
-        if(!(curId in srcData.allMaps)) {
-            runPoster.PostError(`(Submitted)No map id found for: ${curId}`);
+        if(!(id in srcData.allMaps)) {
+            runPoster.PostError(`(Submitted)No map id found for: ${id}`);
             return;
         }
-        const curMap = srcData.allMaps[curId];
+
+        const curMap = srcData.allMaps[id];
 
         if (runs.length === 0) {
             for(const oldRun in curMap.oldSubmittedRuns) {
                 runPoster.DeleteOldSubmittedRun(curMap.oldSubmittedRuns[oldRun]);
             }
-            srcData.allMaps[curId].oldSubmittedRuns = {};
+            srcData.allMaps[id].oldSubmittedRuns = {};
+            return;
+        }
+
+        if(id !== runs[0].game) {
+            runPoster.PostError(`Id's don't match expected: ${id} result: ${runs[0].game}`);
             return;
         }
 
@@ -176,11 +179,9 @@ class SRCRunParser {
         for(const oldRun in runChecked) {
             if(runChecked[oldRun]) {
                 runPoster.DeleteOldSubmittedRun(curMap.oldSubmittedRuns[oldRun]);
-                delete srcData.allMaps[curId].oldSubmittedRuns[oldRun];
+                delete srcData.allMaps[id].oldSubmittedRuns[oldRun];
             }
         }
-    
-        srcData.allMaps[curId].latestSubmittedDate = new Date(runs[0].submitted);
     }
 
     private GenerateNewRunInfo(run: any, curMap: SRCMap) : RunInfo {
