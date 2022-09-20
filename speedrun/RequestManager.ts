@@ -9,8 +9,9 @@ class RequestManager {
     private newMapCheckLimit: number = 30;
 
     BeginLooping() {
-        this.CheckForNewMaps();
-        this.RequestLoop();
+        this.TestFunction();
+        // this.CheckForNewMaps();
+        // this.RequestLoop();
     }
 
     private CheckForNewMaps() {
@@ -122,6 +123,7 @@ class RequestManager {
         srcData.allMaps[dsecID].latestVerifiedDate = testTimedsec;
 
         const sjbID: string = 'm1mnz0jd';
+        const rlssID: string = 'o1yj5rk1';
 
         // this.SendRequest({
         //     req: rb.GetNewVerifiedRunsRequest(dsecID),
