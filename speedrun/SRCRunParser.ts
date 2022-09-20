@@ -211,11 +211,14 @@ class SRCRunParser {
         const runners : RunnerInfo[] = [];
     
         for (const player of players) {
+            console.log(player);
             let image : string = "";
-            if(player.assests === undefined || player.assests.image === undefined || player.assests.image.uri === undefined) {
-                image = backupImage;
+            if (player.assets !== undefined && player.assets.image !== undefined && player.assets.image.uri !== undefined) {
+                image = player.assets.image.uri;
+            } else if(player.assets !== undefined && player.assets.icon !== undefined && player.assets.icon.uri !== undefined) {
+                image = player.assets.icon.uri;
             } else {
-                image = player.assests.image.uri;
+                image = backupImage;
             }
     
             const runner : RunnerInfo = {

@@ -121,12 +121,19 @@ class RequestManager {
         const dsecID: string = 'y6552936';
         srcData.allMaps[dsecID].latestVerifiedDate = testTimedsec;
 
+        const sjbID: string = 'm1mnz0jd';
+
+        // this.SendRequest({
+        //     req: rb.GetNewVerifiedRunsRequest(dsecID),
+        //     func: runParser.ParseNewVerifiedRuns.bind(runParser)
+        // });
+
         this.SendRequest({
-            req: rb.GetNewVerifiedRunsRequest(dsecID),
-            func: runParser.ParseNewVerifiedRuns.bind(runParser)
+            req: rb.GetNewSubmittedRunsRequest(sjbID),
+            func: runParser.ParseNewSubmittedRuns.bind(runParser)
         });
 
-        setTimeout(this.TestFunction3.bind(this), 10000);
+        //setTimeout(this.TestFunction3.bind(this), 10000);
     }
 
     private TestFunction3() {
