@@ -13,6 +13,8 @@ export class RunPoster {
     }
 
     PostNewSubmittedRun(run : RunInfo) {
+        console.log(run);
+        console.log(run.mapId);
         if(process.env.SUBMITTEDCHANNEL === undefined) return;
         client.channels.fetch(process.env.SUBMITTEDCHANNEL)
             .then(channel => {

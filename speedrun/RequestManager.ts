@@ -9,6 +9,11 @@ class RequestManager {
     private newMapCheckLimit: number = 30;
 
     BeginLooping() {
+        if(process.env.ENVIRONMENT === "Dev") {
+            this.TestFunction();
+            return;
+        }
+
         this.CheckForNewMaps();
         this.RequestLoop();
     }
@@ -108,7 +113,37 @@ class RequestManager {
         setTimeout(this.TestFunction2.bind(this), 20000);
     }
 
+    private CheckForNewSub() {
+        for(const key of Object.keys(srcData.allMaps)) {
+            const subReq: APIRequest = {
+                req : rb.GetNewSubmittedRunsRequest(key),
+                id: key,
+                func : runParser.ParseNewSubmittedRuns.bind(runParser)
+            }
+            srcData.requestQueue.push(subReq);
+        }
+    }
+
+    private TestLoop() {
+        try {
+            let reqProcessed = 0
+            while(srcData.requestQueue.length > 0 && reqProcessed < 100) {
+                const item = srcData.requestQueue.shift();
+                if(item === undefined) continue;
+                this.SendRequest(item);
+                ++reqProcessed;
+            }
+        } catch(error) {
+            console.error(error);
+            runPoster.PostError('Error in request loop');
+        }
+        setTimeout(this.TestLoop.bind(this), 120000);
+    }
+
     private TestFunction2() {
+        this.CheckForNewSub();
+        this.TestLoop();
+        return;
         const testTimesjr: Date = new Date('2022-09-14T00:53:13Z');
         const sjr3ID: string = 'y655oy46';
         srcData.allMaps[sjr3ID].latestVerifiedDate = testTimesjr;
