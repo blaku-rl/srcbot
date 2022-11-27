@@ -141,14 +141,11 @@ class RequestManager {
     }
 
     private TestFunction2() {
-        this.CheckForNewSub();
-        this.TestLoop();
-        return;
         const testTimesjr: Date = new Date('2022-09-14T00:53:13Z');
         const sjr3ID: string = 'y655oy46';
         srcData.allMaps[sjr3ID].latestVerifiedDate = testTimesjr;
 
-        const testTimeyc: Date = new Date('2022-07-19T02:34:11Z');
+        const testTimeyc: Date = new Date('2022-07-19T02:34:41Z');
         const yoshiID: string = '4d7ne4r6';
         srcData.allMaps[yoshiID].latestVerifiedDate = testTimeyc;
 
@@ -168,26 +165,26 @@ class RequestManager {
         //     func: runParser.ParseNewVerifiedRuns.bind(runParser)
         // });
 
-        console.log('Getting new submitted runs')
+        console.log('Getting new verified runs')
         this.SendRequest({
-            req: rb.GetNewSubmittedRunsRequest(rlID),
-            id: rlID,
-            func: runParser.ParseNewSubmittedRuns.bind(runParser)
+            req: rb.GetNewVerifiedRunsRequest(yoshiID),
+            id: yoshiID,
+            func: runParser.ParseNewVerifiedRuns.bind(runParser)
         });
 
         setTimeout(this.TestFunction3.bind(this), 10000);
     }
 
     private TestFunction3() {
-        // if(srcData.requestQueue.length > 0) {
-        //     this.SendRequest(srcData.requestQueue[0]);
-        // }
-        const rlID: string = '4d7eyz67';
-        console.log(srcData.allMaps[rlID].oldSubmittedRuns);
-        for(const run in srcData.allMaps[rlID].oldSubmittedRuns) {
-            console.log(srcData.allMaps[rlID].oldSubmittedRuns[run])
-            runPoster.DeleteOldSubmittedRun(srcData.allMaps[rlID].oldSubmittedRuns[run])
+        if(srcData.requestQueue.length > 0) {
+            this.SendRequest(srcData.requestQueue[0]);
         }
+        // const yoshiID: string = '4d7ne4r6';
+        // console.log(srcData.allMaps[yoshiID].oldSubmittedRuns);
+        // for(const run in srcData.allMaps[yoshiID].oldSubmittedRuns) {
+        //     console.log(srcData.allMaps[yoshiID].oldSubmittedRuns[run])
+        //     runPoster.DeleteOldSubmittedRun(srcData.allMaps[yoshiID].oldSubmittedRuns[run])
+        // }
     }
 }
 
