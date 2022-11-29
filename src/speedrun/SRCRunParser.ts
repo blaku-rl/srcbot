@@ -68,25 +68,20 @@ class SRCRunParser {
     }
     
     ParseNewVerifiedRuns(res : any, id: string) {
-        console.log("Starting new verified run check");
-        console.log(id);
         const runs = res.data.data
         if (runs.length === 0) return
         
         const curId: string = runs[0].game
         if(!(curId in srcData.allMaps)) {
             runPoster.PostError(`(Verified)No map id found for: ${curId}`);
-            console.log("Not in maps");
             return;
         }
         const curMap = srcData.allMaps[curId];
 
         const newestRunDate: Date = new Date(runs[0].status["verify-date"])
         if (newestRunDate <= curMap.latestVerifiedDate) {
-            console.log("Not newer");
             return
         }
-
     
         for (const run of runs) {
             try {

@@ -91,21 +91,17 @@ class SRCRunParser {
         }
     }
     ParseNewVerifiedRuns(res, id) {
-        console.log("Starting new verified run check");
-        console.log(id);
         const runs = res.data.data;
         if (runs.length === 0)
             return;
         const curId = runs[0].game;
         if (!(curId in SRCTypes_1.default.allMaps)) {
             RunPoster_1.default.PostError(`(Verified)No map id found for: ${curId}`);
-            console.log("Not in maps");
             return;
         }
         const curMap = SRCTypes_1.default.allMaps[curId];
         const newestRunDate = new Date(runs[0].status["verify-date"]);
         if (newestRunDate <= curMap.latestVerifiedDate) {
-            console.log("Not newer");
             return;
         }
         for (const run of runs) {

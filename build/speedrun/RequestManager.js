@@ -150,10 +150,6 @@ class RequestManager {
         SRCTypes_1.default.allMaps[dsecID].latestVerifiedDate = testTimedsec;
         const sjbID = 'm1mnz0jd';
         const rlssID = 'o1yj5rk1';
-        // this.SendRequest({
-        //     req: rb.GetNewVerifiedRunsRequest(dsecID),
-        //     func: runParser.ParseNewVerifiedRuns.bind(runParser)
-        // });
         console.log('Getting new verified runs');
         this.SendRequest({
             req: RequestBuilder_1.default.GetNewVerifiedRunsRequest(yoshiID),
@@ -166,12 +162,6 @@ class RequestManager {
         if (SRCTypes_1.default.requestQueue.length > 0) {
             this.SendRequest(SRCTypes_1.default.requestQueue[0]);
         }
-        // const yoshiID: string = '4d7ne4r6';
-        // console.log(srcData.allMaps[yoshiID].oldSubmittedRuns);
-        // for(const run in srcData.allMaps[yoshiID].oldSubmittedRuns) {
-        //     console.log(srcData.allMaps[yoshiID].oldSubmittedRuns[run])
-        //     runPoster.DeleteOldSubmittedRun(srcData.allMaps[yoshiID].oldSubmittedRuns[run])
-        // }
     }
 }
 const requestManager = new RequestManager();
