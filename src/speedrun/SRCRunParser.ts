@@ -3,12 +3,17 @@ import runPoster, { RunPoster } from './RunPoster'
 import rb from './RequestBuilder'
 
 class SRCRunParser {
+    private ignoredMaps: Array<String> = ['9doxkvod'];
+
     ParseAllSeriesData(res : any, id: string) {
         console.log('Checking for new maps');
         console.log(`${res.data.data.length} games found`);
         const curTime: Date = new Date();
         for (const item of res.data.data) {
             try{
+                if(this.ignoredMaps.includes(item.id)){
+                    continue;
+                }
                 const cats: Record<string, CategoryInfo> = {};
                 for(const cat of item.categories.data) {
                     cats[cat.id] = {
