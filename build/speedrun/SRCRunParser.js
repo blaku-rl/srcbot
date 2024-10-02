@@ -30,22 +30,26 @@ const SRCTypes_1 = __importStar(require("./SRCTypes"));
 const RunPoster_1 = __importDefault(require("./RunPoster"));
 const RequestBuilder_1 = __importDefault(require("./RequestBuilder"));
 class SRCRunParser {
+    ignoredMaps = ["9doxkvod"];
     ParseAllSeriesData(res, id) {
-        console.log('Checking for new maps');
+        console.log("Checking for new maps");
         console.log(`${res.data.data.length} games found`);
         const curTime = new Date();
         for (const item of res.data.data) {
             try {
+                if (this.ignoredMaps.includes(item.id)) {
+                    continue;
+                }
                 const cats = {};
                 for (const cat of item.categories.data) {
                     cats[cat.id] = {
                         id: cat.id,
-                        name: cat.name
+                        name: cat.name,
                     };
                 }
                 const variables = {};
                 for (const variable of item.variables.data) {
-                    if (!variable['is-subcategory'])
+                    if (!variable["is-subcategory"])
                         continue;
                     const values = {};
                     for (const key of Object.keys(variable.values.values)) {
@@ -53,8 +57,8 @@ class SRCRunParser {
                     }
                     const newVar = {
                         id: variable.id,
-                        isSubCategory: variable['is-subcategory'],
-                        values: values
+                        isSubCategory: variable["is-subcategory"],
+                        values: values,
                     };
                     variables[variable.id] = newVar;
                 }
@@ -62,7 +66,7 @@ class SRCRunParser {
                 for (const level of item.levels.data) {
                     const newLvl = {
                         id: level.id,
-                        name: level.name
+                        name: level.name,
                     };
                     levels[level.id] = newLvl;
                 }
@@ -80,13 +84,14 @@ class SRCRunParser {
                     levels: levels,
                     categories: cats,
                     variables: variables,
-                    oldSubmittedRuns: oldSubmittedRuns
+                    oldSubmittedRuns: oldSubmittedRuns,
                 };
                 SRCTypes_1.default.allMaps[item.id] = map;
+                RunPoster_1.default.DevLog(`Map ${map.name} added to map list`);
             }
             catch (error) {
                 console.error(error);
-                RunPoster_1.default.PostError('Error getting new map data');
+                RunPoster_1.default.PostError("Error getting new map data");
             }
         }
     }
@@ -104,6 +109,7 @@ class SRCRunParser {
         if (newestRunDate <= curMap.latestVerifiedDate) {
             return;
         }
+        console.log(`${runs.length} new verified runs found for ${curMap.name}`);
         for (const run of runs) {
             try {
                 const curRunDate = new Date(run.status["verify-date"]);
@@ -120,17 +126,17 @@ class SRCRunParser {
                     }
                 }
                 if (!isInQueue) {
-                    console.log("Not in q");
+                    console.log(`Adding run ${newRun.link} to placement queue`);
                     SRCTypes_1.default.requestQueue.push({
                         req: leaderbordCheck,
                         id: id,
-                        func: this.ParseLeaderboardInfo.bind(this)
+                        func: this.ParseLeaderboardInfo.bind(this),
                     });
                 }
             }
             catch (error) {
                 console.error(error);
-                RunPoster_1.default.PostError('Error parsing new verified run');
+                RunPoster_1.default.PostError("Error parsing new verified run");
             }
         }
         SRCTypes_1.default.allMaps[curId].latestVerifiedDate = newestRunDate;
@@ -150,7 +156,7 @@ class SRCRunParser {
             }
             catch (error) {
                 console.error(error);
-                RunPoster_1.default.PostError('Error getting leaderboard info for runs');
+                RunPoster_1.default.PostError("Error getting leaderboard info for runs");
             }
         }
     }
@@ -188,7 +194,7 @@ class SRCRunParser {
             }
             catch (error) {
                 console.error(error);
-                RunPoster_1.default.PostError('Error parsing new submitted runs');
+                RunPoster_1.default.PostError("Error parsing new submitted runs");
             }
         }
         for (const oldRun in runChecked) {
@@ -211,7 +217,7 @@ class SRCRunParser {
         newRun.id = run.id;
         newRun.mapId = run.game;
         newRun.categoryId = run.category.data.id;
-        newRun.level = run.level !== null ? run.level : '';
+        newRun.level = run.level !== null ? run.level : "";
         newRun.link = run.weblink;
         newRun.time = run.times.primary_t;
         newRun.date = run.status["verify-date"];
@@ -224,10 +230,18 @@ class SRCRunParser {
         const runners = [];
         for (const player of players) {
             let image = "";
-            if (player.assets !== undefined && player.assets.image !== undefined && player.assets.image.uri !== undefined && player.assets.image.uri !== null && player.assets.image.uri !== '') {
+            if (player.assets !== undefined &&
+                player.assets.image !== undefined &&
+                player.assets.image.uri !== undefined &&
+                player.assets.image.uri !== null &&
+                player.assets.image.uri !== "") {
                 image = player.assets.image.uri;
             }
-            else if (player.assets !== undefined && player.assets.icon !== undefined && player.assets.icon.uri !== undefined && player.assets.icon.uri !== null && player.assets.icon.uri !== '') {
+            else if (player.assets !== undefined &&
+                player.assets.icon !== undefined &&
+                player.assets.icon.uri !== undefined &&
+                player.assets.icon.uri !== null &&
+                player.assets.icon.uri !== "") {
                 image = player.assets.icon.uri;
             }
             else {
@@ -236,7 +250,7 @@ class SRCRunParser {
             const runner = {
                 runnerId: player.id,
                 runnerName: player.names.international,
-                runnerImage: image
+                runnerImage: image,
             };
             runners.push(runner);
         }

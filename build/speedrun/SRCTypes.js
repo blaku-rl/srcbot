@@ -2,22 +2,20 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RunInfo = void 0;
 class RunInfo {
-    constructor() {
-        this.id = '';
-        this.mapId = '';
-        this.categoryId = '';
-        this.level = '';
-        this.link = '';
-        this.time = 0;
-        this.date = new Date();
-        this.runners = [];
-        this.valueNames = [];
-        this.values = {};
-    }
+    id = "";
+    mapId = "";
+    categoryId = "";
+    level = "";
+    link = "";
+    time = 0;
+    date = new Date();
+    runners = [];
+    valueNames = [];
+    values = {};
     GetRunnersString() {
         if (this.runners.length === 0)
-            return '';
-        let rString = '';
+            return "";
+        let rString = "";
         let index;
         for (index = 0; index < this.runners.length - 1; ++index) {
             rString += `${this.runners[index].runnerName}, `;
@@ -48,14 +46,18 @@ class RunInfo {
         let remainTime = 0;
         const res = (totalTime + "").split(".");
         if (res.length === 2) {
-            milliseconds = Number(res[1]);
+            let correctLenMillStr = res[1];
+            while (correctLenMillStr.length < 3) {
+                correctLenMillStr += "0";
+            }
+            milliseconds = Number(correctLenMillStr);
         }
         remainTime = Number(res[0]);
         const hours = this.LameConversion(remainTime, 3600);
-        remainTime = remainTime - (hours * 3600);
+        remainTime = remainTime - hours * 3600;
         const minutes = this.LameConversion(remainTime, 60);
-        const seconds = remainTime - (minutes * 60);
-        let milliStr = '';
+        const seconds = remainTime - minutes * 60;
+        let milliStr = "";
         if (milliseconds < 10) {
             milliStr = `00${milliseconds}`;
         }
@@ -75,8 +77,8 @@ class RunInfo {
     }
     GetValuesString(values) {
         if (values.length === 0)
-            return '';
-        let valueStr = '';
+            return "";
+        let valueStr = "";
         for (const val in values) {
             valueStr += `${values[val]}, `;
         }
@@ -84,8 +86,8 @@ class RunInfo {
         return `(${valueStr})`;
     }
     GetAllCategoryInfo() {
-        let categoryStr = '';
-        if (this.level === '') {
+        let categoryStr = "";
+        if (this.level === "") {
             categoryStr = `${srcData.allMaps[this.mapId].categories[this.categoryId].name} ${this.GetValuesString(this.valueNames)}`;
         }
         else {
@@ -100,10 +102,9 @@ class RunInfo {
     }
 }
 exports.RunInfo = RunInfo;
-;
 const srcData = {
     requestQueue: [],
     allMaps: {},
-    runsToPlace: {}
+    runsToPlace: {},
 };
 exports.default = srcData;

@@ -9,31 +9,36 @@ const SRCTypes_1 = __importDefault(require("./SRCTypes"));
 const index_1 = __importDefault(require("../index"));
 class RunPoster {
     SetRunInfoInEmbed(run, embed) {
-        embed.setURL(run.link)
+        embed
+            .setURL(run.link)
             .setThumbnail(SRCTypes_1.default.allMaps[run.mapId].image)
-            .setAuthor({ name: run.GetRunnersString(), iconURL: run.GetRunnerImage() })
+            .setAuthor({
+            name: run.GetRunnersString(),
+            iconURL: run.GetRunnerImage(),
+        })
             .setDescription(`${SRCTypes_1.default.allMaps[run.mapId].name}\n${run.GetAllCategoryInfo()}`)
-            .addField('Time', run.GetTimeString(), true);
+            .addFields({ name: "Time", value: run.GetTimeString(), inline: true });
         return embed;
     }
     PostNewSubmittedRun(run) {
-        console.log(run);
-        console.log(run.mapId);
-        if (process.env.SUBMITTEDCHANNEL === undefined)
+        console.log(`New submitted run ${run.link}`);
+        this.DevLog(run);
+        if (process.env.SUBMITTEDCHANNEL === undefined) {
+            console.error("Submitted Channel is not defined");
             return;
-        index_1.default.channels.fetch(process.env.SUBMITTEDCHANNEL)
-            .then(channel => {
-            if (channel === null || (channel === null || channel === void 0 ? void 0 : channel.type) !== 'GUILD_TEXT')
+        }
+        index_1.default.channels
+            .fetch(process.env.SUBMITTEDCHANNEL)
+            .then((channel) => {
+            if (channel === null || channel?.type !== discord_js_1.ChannelType.GuildText)
                 return;
             try {
-                const message = new discord_js_1.MessageEmbed()
-                    .setTitle("NEW SUBMITTED RUN");
+                const message = new discord_js_1.EmbedBuilder().setTitle("NEW SUBMITTED RUN");
                 this.SetRunInfoInEmbed(run, message);
-                channel.send({ embeds: [message] })
-                    .then((msg) => {
+                channel.send({ embeds: [message] }).then((msg) => {
                     SRCTypes_1.default.allMaps[run.mapId].oldSubmittedRuns[run.id] = {
                         messageID: msg.id,
-                        run: run
+                        run: run,
                     };
                 });
             }
@@ -45,14 +50,20 @@ class RunPoster {
             .catch(console.error);
     }
     DeleteOldSubmittedRun(oldSubmittedRun) {
-        if (process.env.SUBMITTEDCHANNEL === undefined)
+        console.log("Deleting old submitted run");
+        if (process.env.SUBMITTEDCHANNEL === undefined) {
+            console.error("Submitted Channel is not defined");
             return;
-        index_1.default.channels.fetch(process.env.SUBMITTEDCHANNEL)
-            .then(channel => {
-            if (channel === null || (channel === null || channel === void 0 ? void 0 : channel.type) !== 'GUILD_TEXT')
+        }
+        index_1.default.channels
+            .fetch(process.env.SUBMITTEDCHANNEL)
+            .then((channel) => {
+            if (channel === null || channel?.type !== discord_js_1.ChannelType.GuildText)
                 return;
             try {
-                channel.messages.fetch(oldSubmittedRun.messageID).then(msg => msg.delete());
+                channel.messages
+                    .fetch(oldSubmittedRun.messageID)
+                    .then((msg) => msg.delete());
             }
             catch (error) {
                 console.error(error);
@@ -62,17 +73,24 @@ class RunPoster {
             .catch(console.error);
     }
     PostNewVerifiedRun(run, place, total) {
-        if (process.env.VERIFIEDCHANNEL === undefined)
+        console.log(`New verified run posted ${run.link}`);
+        if (process.env.VERIFIEDCHANNEL === undefined) {
+            console.error("Verified Channel is not defined");
             return;
-        index_1.default.channels.fetch(process.env.VERIFIEDCHANNEL)
-            .then(channel => {
-            if (channel === null || (channel === null || channel === void 0 ? void 0 : channel.type) !== 'GUILD_TEXT')
+        }
+        index_1.default.channels
+            .fetch(process.env.VERIFIEDCHANNEL)
+            .then((channel) => {
+            if (channel === null || channel?.type !== discord_js_1.ChannelType.GuildText)
                 return;
             try {
-                const message = new discord_js_1.MessageEmbed()
-                    .setTitle(place === 1 ? 'NEW WORLD RECORD' : 'NEW VERIFIED RUN');
+                const message = new discord_js_1.EmbedBuilder().setTitle(place === 1 ? "NEW WORLD RECORD" : "NEW VERIFIED RUN");
                 this.SetRunInfoInEmbed(run, message);
-                message.addField('Place', `${place} / ${total}`, true);
+                message.addFields({
+                    name: "Place",
+                    value: `${place} / ${total}`,
+                    inline: true,
+                });
                 channel.send({ embeds: [message] });
             }
             catch (error) {
@@ -82,24 +100,34 @@ class RunPoster {
         })
             .catch(console.error);
     }
-    PostError(message = '') {
-        if (message !== '') {
-            console.log(message);
+    PostError(message = "") {
+        if (message !== "") {
+            console.error(message);
         }
-        if (process.env.ERRORCHANNEL === undefined)
+        if (process.env.ERRORCHANNEL === undefined) {
+            console.error("Error Channel is not defined");
             return;
-        index_1.default.channels.fetch(process.env.ERRORCHANNEL)
-            .then(channel => {
-            if (channel === null || (channel === null || channel === void 0 ? void 0 : channel.type) !== 'GUILD_TEXT')
+        }
+        index_1.default.channels
+            .fetch(process.env.ERRORCHANNEL)
+            .then((channel) => {
+            if (channel === null || channel?.type !== discord_js_1.ChannelType.GuildText)
                 return;
             try {
-                channel.send({ content: `An error has occured${message === '' ? '' : `: '${message}'`}, check the logs <@333083158616735745>` });
+                channel.send({
+                    content: `An error has occured${message === "" ? "" : `: '${message}'`}, check the logs <@333083158616735745>`,
+                });
             }
             catch (error) {
                 console.error(error);
             }
         })
             .catch(console.error);
+    }
+    DevLog(message) {
+        if (process.env.ENVIRONMENT === "Dev") {
+            console.log(message);
+        }
     }
 }
 exports.RunPoster = RunPoster;

@@ -1,12 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class RequestBuilder {
-    constructor() {
-        this.runsStart = 'https://www.speedrun.com/api/v1/runs?game=';
-        this.verifiedEnd = '&status=verified&orderby=verify-date&direction=desc&embed=category,players&max=200';
-        this.submittedEnd = '&status=new&orderby=submitted&direction=desc&embed=category,players&max=200';
-        this.runCheckStart = 'https://www.speedrun.com/api/v1/leaderboards/';
-    }
+    runsStart = 'https://www.speedrun.com/api/v1/runs?game=';
+    verifiedEnd = '&status=verified&orderby=verify-date&direction=desc&embed=category,players&max=200';
+    submittedEnd = '&status=new&orderby=submitted&direction=desc&embed=category,players&max=200';
+    runCheckStart = 'https://www.speedrun.com/api/v1/leaderboards/';
     GetNewVerifiedRunsRequest(id) {
         return `${this.runsStart}${id}${this.verifiedEnd}`;
     }
