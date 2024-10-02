@@ -5,13 +5,11 @@ import rb from "./RequestBuilder";
 import runPoster from "./RunPoster";
 
 class RequestManager {
-  private newMapCheckIndex: number = 0;
-  private newMapCheckLimit: number = 30;
-  private requestLoopLength: number = 120000;
-  private maxRequests: number = 100;
+  private newMapCheckLimit: number = 10;
+  private newMapCheckIndex: number = this.newMapCheckLimit;
+  private requestLoopLength: number = 1000;
 
   BeginLooping() {
-    this.CheckForNewMaps();
     this.RequestLoop();
   }
 
@@ -46,7 +44,7 @@ class RequestManager {
     axios
       .get(item.req, {
         headers: {
-          "User-Agent": "rlsrcbot/1.0",
+          "User-Agent": "rlsrcbot/1.2",
         },
       })
       .then((res) => {
@@ -60,28 +58,26 @@ class RequestManager {
 
   private RequestLoop() {
     try {
-      let reqProcessed = 0;
-      while (
-        srcData.requestQueue.length > 0 &&
-        reqProcessed < this.maxRequests
-      ) {
-        const item = srcData.requestQueue.shift();
-        if (item === undefined) continue;
-        this.SendRequest(item);
-        ++reqProcessed;
-      }
-
-      if (srcData.requestQueue.length === 0) {
-        this.CheckForNewRuns();
-      }
-
       if (this.newMapCheckIndex >= this.newMapCheckLimit) {
         this.CheckForNewMaps();
         this.CheckForNonPostedRuns();
         this.newMapCheckIndex = 0;
-      } else {
+      }
+
+      if (srcData.requestQueue.length === 0) {
+        this.CheckForNewRuns();
         ++this.newMapCheckIndex;
       }
+
+      if (srcData.requestQueue.length === 0) {
+        throw new Error("Request queue should not be empty in loop");
+      }
+
+      const item = srcData.requestQueue.shift();
+      if (item === undefined) {
+        throw new Error("Item in request queue is undefined");
+      }
+      this.SendRequest(item);
     } catch (error) {
       console.error(error);
       runPoster.PostError("Error in request loop");
