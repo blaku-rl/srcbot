@@ -9,10 +9,9 @@ const client = new Client({
 });
 
 client.on("ready", () => {
-  console.log("Ready!");
+  console.log("Bot is online");
+  requestManager.BeginLooping();
 });
 
 client.login(process.env.TOKEN);
-requestManager.BeginLooping();
-
 export default client;

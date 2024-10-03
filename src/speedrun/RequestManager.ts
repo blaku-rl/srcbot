@@ -9,7 +9,10 @@ class RequestManager {
   private newMapCheckIndex: number = this.newMapCheckLimit;
   private requestLoopLength: number = 1000;
 
-  BeginLooping() {
+  async BeginLooping() {
+    for (let i = 0; i < 3; ++i) {
+      if (await runPoster.RemovePreviousSubmittedRuns()) break;
+    }
     this.RequestLoop();
   }
 
