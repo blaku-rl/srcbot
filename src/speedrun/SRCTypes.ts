@@ -74,42 +74,20 @@ export class RunInfo {
     return image;
   }
 
-  private LameConversion(time: number, limit: number): number {
-    let loops = 1;
-    while (time > limit * loops) {
-      ++loops;
-    }
-    return loops - 1;
-  }
-
   GetTimeString(): string {
     let totalTime = this.time.toString();
-    let milliseconds = 0;
+    let milliStr = "000";
     let remainTime = 0;
     const res = (totalTime + "").split(".");
-    if (res.length === 2) {
-      let correctLenMillStr: String = res[1];
-      while (correctLenMillStr.length < 3) {
-        correctLenMillStr += "0";
-      }
-      milliseconds = Number(correctLenMillStr);
-    }
+    if (res.length === 2) milliStr = res[1].padEnd(3, "0");
     remainTime = Number(res[0]);
 
-    const hours = this.LameConversion(remainTime, 3600);
-    remainTime = remainTime - hours * 3600;
+    const hours = Math.floor(remainTime / 3600);
+    remainTime = remainTime % 3600;
 
-    const minutes = this.LameConversion(remainTime, 60);
-    const seconds = remainTime - minutes * 60;
+    const minutes = Math.floor(remainTime / 60);
+    const seconds = remainTime % 60;
 
-    let milliStr = "";
-    if (milliseconds < 10) {
-      milliStr = `00${milliseconds}`;
-    } else if (milliseconds < 100) {
-      milliStr = `0${milliseconds}`;
-    } else {
-      milliStr = milliseconds.toString();
-    }
     if (hours > 0) {
       return `${hours}h ${minutes}m ${seconds}s ${milliStr}ms`;
     }
@@ -169,4 +147,3 @@ const srcData: SRCData = {
 };
 
 export default srcData;
-
