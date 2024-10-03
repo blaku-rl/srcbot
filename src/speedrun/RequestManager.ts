@@ -39,24 +39,33 @@ class RequestManager {
     }
   }
 
-  private SendRequest(item: APIRequest) {
-    runPoster.DevLog(`Sending request ${item.req}`);
-    axios
-      .get(item.req, {
-        headers: {
-          "User-Agent": "rlsrcbot/1.2",
-        },
-      })
-      .then((res) => {
-        item.func(res, item.id);
-      })
-      .catch((error) => {
+  private async SendRequest(item: APIRequest) {
+    let reqSuccess = false;
+    for (let i = 0; i < 5; ++i) {
+      runPoster.DevLog(`Sending request ${item.req}`);
+      try {
+        const response = await axios.get(item.req, {
+          headers: {
+            "User-Agent": "rlsrcbot/1.2",
+          },
+        });
+        item.func(response, item.id);
+        reqSuccess = true;
+        break;
+      } catch (error) {
         console.error(error);
-        runPoster.PostError("Error with sending request to SRC");
-      });
+        await new Promise((f) => setTimeout(f, 1000));
+      }
+    }
+
+    if (!reqSuccess) {
+      runPoster.PostError(
+        `Request ${item.req} was not able to be completed after 5 attempts`,
+      );
+    }
   }
 
-  private RequestLoop() {
+  private async RequestLoop() {
     try {
       if (this.newMapCheckIndex >= this.newMapCheckLimit) {
         this.CheckForNewMaps();
@@ -77,7 +86,7 @@ class RequestManager {
       if (item === undefined) {
         throw new Error("Item in request queue is undefined");
       }
-      this.SendRequest(item);
+      await this.SendRequest(item);
     } catch (error) {
       console.error(error);
       runPoster.PostError("Error in request loop");
