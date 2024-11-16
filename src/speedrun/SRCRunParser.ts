@@ -255,9 +255,13 @@ class SRCRunParser {
         image = backupImage;
       }
 
+      const name =
+        player.rel === "user" ? player.names.international : player.name;
+      const playerId = player.rel === "user" ? player.id : 0;
+
       const runner: RunnerInfo = {
-        runnerId: player.id,
-        runnerName: player.names.international,
+        runnerId: playerId,
+        runnerName: name,
         runnerImage: image,
       };
       runners.push(runner);
