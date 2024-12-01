@@ -127,7 +127,7 @@ export class RunPoster {
     client.channels
       .fetch(process.env.VERIFIEDCHANNEL)
       .then((channel) => {
-        if (channel === null || channel?.type !== ChannelType.GuildText) return;
+        if (channel === null || channel?.type !== ChannelType.GuildAnnouncement) return;
         try {
           const message: EmbedBuilder = new EmbedBuilder().setTitle(
             place === 1 ? "NEW WORLD RECORD" : "NEW VERIFIED RUN",
