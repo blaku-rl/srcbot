@@ -41,6 +41,12 @@ const approvedMainCategories = [
   "Exhibition Match (Soccar, 1v4, Beginner, 5 Goals)",
 ];
 
+const approvedExtensionCategories = [
+	"Dribble",
+	"Air Dribble",
+	"Flip Reset",
+]
+
 client.on(Events.MessageCreate, async (message) => {
   if (message.channel.type !== ChannelType.GuildAnnouncement) return;
   if (!message.author.bot) return;
@@ -64,6 +70,14 @@ client.on(Events.MessageCreate, async (message) => {
     return;
   if (mapName === "Rocket League" && !approvedMainCategories.includes(category))
     return;
+
+	if (mapName === "Rocket League Category Extensions"){
+		let blockedCategory = true;
+		for (const cat in approvedExtensionCategories)
+			if (category.startsWith(cat)) blockedCategory = false;
+
+		if (blockedCategory) return;
+	}
 
   message.crosspost();
 });
