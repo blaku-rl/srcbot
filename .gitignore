@@ -38,6 +38,7 @@ bower_components
 build/*
 build/*.js
 build/Release
+build/index.js
 
 # Dependency directories
 node_modules/
